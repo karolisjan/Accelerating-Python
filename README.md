@@ -14,12 +14,12 @@ class Matrix
 public:
   Matrix();
   Matrix(size_t, size_t);    
-	Matrix(size_t, size_t, std::vector<double>);    
-	Matrix Dot(Matrix);
+  Matrix(size_t, size_t, std::vector<double>);    
+  Matrix Dot(Matrix);
   Matrix T();
     
-	size_t nrows, ncols;
-	std::vector<double> data;
+  size_t nrows, ncols;
+  std::vector<double> data;
 };
 ```
 This can be fairly easily achieved using Cython. First, we create a [.pyx](https://github.com/karolisjan/Accelerating-Python/blob/master/classes/matrix_wrapper.pyx) file and tell Cython [where and how](https://github.com/karolisjan/Accelerating-Python/blob/master/classes/matrix_wrapper.pyx#L1) the C++ class is defined. 
