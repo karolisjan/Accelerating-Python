@@ -111,3 +111,5 @@ numpyzed_transpose, elapsed time: 0.0002
 First 5 values: [0.3745401188473625, 0.03142918568673425, 0.6420316461542878, 0.0516817211686077, 0.10312386883593261]
 Last 5 values: [0.39850202880398033, 0.8090345502403417, 0.9303511771330678, 0.0415959562564695, 0.21714040403767187]
 ```
+## References
+[Smith, Kurt W.. Cython: A Guide for Python Programmers. O'Reilly Media. Kindle Edition](https://www.amazon.co.uk/Cython-Programmers-Kurt-W-Smith-ebook/dp/B00SNS9JFI) 
