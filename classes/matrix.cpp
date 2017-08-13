@@ -1,4 +1,5 @@
 #include "matrix.h"
+#include <omp.h>
 #include <algorithm>
 #include <cassert>
 
@@ -10,9 +11,9 @@ Matrix::Matrix(size_t nrows, size_t ncols) : nrows(nrows), ncols(ncols)
 }
 
 Matrix::Matrix(size_t nrows, size_t ncols, std::vector<double> data) : nrows(nrows), ncols(ncols)
-{
+{    
     this->data = std::vector<double>(nrows * ncols);
-    
+        
 	if (data.size() > nrows * ncols)
 		return;
     
@@ -21,37 +22,41 @@ Matrix::Matrix(size_t nrows, size_t ncols, std::vector<double> data) : nrows(nro
 
 Matrix Matrix::Dot(Matrix other)
 {
-	Matrix result(this->nrows, other.ncols);
+    assert(nrows == other.ncols);
+
+	Matrix result(nrows, other.ncols);
     
-    assert(this->nrows == other.ncols);
-    assert(result.data.size() != 0);
+    std::vector<double> &data = this->data;
+        
+    int i, j, k;
 	
-	size_t i, j, k;
-	
-    for (i = 0; i < this->nrows; ++i) {
-		for (j = 0; j < other.ncols; ++j) {
-			result.data[i * result.ncols + j] = this->data[i * this->ncols + 0] * other.data[0 * other.ncols + j];
-			for (k = 1; k < this->ncols; ++k) {
-				result.data[i * result.ncols + j] += 
-                this->data[i * this->ncols + k] * other.data[k * other.ncols + j];
-			}
-		}
-	}
-	
+    #pragma omp parallel shared(result, data, other), private(i, j, k)
+    {
+        #pragma omp for schedule(static) 
+        for (i = 0; i < nrows; ++i) {
+            for (j = 0; j < other.ncols; ++j) {
+                result.data[i * result.ncols + j] = data[i * ncols + 0] * other.data[0 * other.ncols + j];
+                
+                for (k = 1; k < ncols; ++k) {
+                    result.data[i * result.ncols + j] += data[i * ncols + k] * other.data[k * other.ncols + j];
+                }
+            }
+        }
+    }
+    
 	return result;
 }
 
 Matrix Matrix::T()
 {
-    Matrix result(this->ncols, this->nrows);
-
-    size_t i, j;
-    
-	for (i = 0; i < this->nrows; ++i) {
-		for (j = 0; j < this->ncols; ++j) {
-			result.data[j * result.ncols + i] = this->data[i * this->ncols + j];
-		}
-	}
+    Matrix result(ncols, nrows);
+ 
+    #pragma omp parallel for
+    for (int i = 0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            result.data[j * result.ncols + i] = data[i * ncols + j];
+        }
+    }
 
 	return result;
 }

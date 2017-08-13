@@ -1,8 +1,5 @@
-/*
-	g++ -Wall test.cpp matrix.cpp -o test
-*/
-
 #include "matrix.h"
+#include "timer.h"
 #include <iostream>
 #include <vector>
 
@@ -16,24 +13,21 @@ std::ostream& operator<<(std::ostream& os, std::vector<T>& v)
     return os;
 }
 
+void TestDotProduct(Matrix &A, Matrix &B)
+{
+    Matrix D = A.Dot(B.T());
+}
+
 int main()
 {
-    int n = 2, m = 3;
+    int n = 1000, m = 1000;
     
-	std::vector<double> a = {1, 2, 3, 4, 5, 6};
-	std::vector<double> b = {7, 8, 9, 10, 11, 12};
-    
-    std::cout << "Vector a = " << a << std::endl;
-    std::cout << "Vector a = " << b << std::endl;    
-	
+    std::vector<double> a = std::vector<double>(n * m, 1);
+    std::vector<double> b = std::vector<double>(n * m, 1);
+            
 	Matrix A(n, m, a), B(n, m, b);
-	
-	Matrix D = A.Dot(B.T());
-	
-    std::cout << "Matrix A\n" << A << std::endl;
-    std::cout << "Matrix B\n" << B << std::endl;
-    std::cout << "Transpose of matrix B\n" << B.T() << std::endl;
-	std::cout << "dot product of A and B\n" << D << std::endl;	
+    
+    std::cout << "Elapsed time: " << timer<>::timeit(TestDotProduct, A, B) << "ms" << std::endl;
 	
 	return 0;
 }

@@ -4,7 +4,7 @@ from matrix_wrapper import PyMatrix
 from timeit import default_timer as timer
 
 np.random.seed(42)
-nrows, ncols = 100, 100
+nrows, ncols = 1000, 1000
 nums = np.random.random(size=(nrows * ncols)).tolist()
 
 def pythonized_dot():
@@ -65,10 +65,10 @@ def time_it(func):
     print()
 
 if __name__ == "__main__":
-    time_it(pythonized_dot)
+    # time_it(pythonized_dot)
     time_it(cythonized_dot)
     time_it(numpyzed_dot)
-    time_it(pythonized_transpose)
+    # time_it(pythonized_transpose)
     time_it(cythonized_transpose)
     time_it(numpyzed_transpose)
     

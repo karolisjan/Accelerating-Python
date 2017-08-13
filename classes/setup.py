@@ -10,7 +10,8 @@ sourcefiles  = ['matrix_wrapper.pyx', 'matrix.cpp']
 
 ext = [Extension('*',
                  sourcefiles,
-                 language='c++')]
+                 language='c++',
+                 extra_compile_args=['/openmp'])]
 
 setup(
   ext_modules=cythonize(ext), 
